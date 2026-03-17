@@ -1,30 +1,95 @@
-# Flask Microservices Deployment using Docker Compose and Nginx
+# Flask App Deployment using Docker Compose
 
-This project demonstrates a simple production-style microservices architecture using Docker.
+This project is a simple practice setup to understand how a real backend application can be deployed using Docker.
 
-The application is built using the Flask framework and is containerized using Docker. Multiple instances of the Flask application are deployed to simulate horizontal scaling and load balancing.
+The application is written in Python using Flask and is containerized using Docker.
+Two instances of the Flask app are started to simulate scaling and basic load balancing.
 
-Nginx is used as a reverse proxy and load balancer to distribute incoming HTTP traffic across multiple Flask application containers.
+Nginx is used as a reverse proxy to receive user requests and forward them to the running Flask containers.
 
-MySQL is used as the backend database with persistent storage configured through Docker volumes. Initial database scripts can be executed automatically during container startup.
+MySQL is used as the database and Redis is added as a caching service.
+Docker Compose is used to run and manage all the containers together.
 
-Redis is integrated as an in-memory cache layer to improve performance and demonstrate multi-service communication within a Docker network.
+---
 
-Docker Compose is used to orchestrate all services including:
+## Project Components
 
-- Multiple Flask application containers
-- Nginx reverse proxy
-- MySQL database
-- Redis cache
+* Flask application (Python backend)
+* Nginx (reverse proxy and load balancer)
+* MySQL (database with persistent volume)
+* Redis (in-memory cache)
+* Docker & Docker Compose (container orchestration)
 
-This project helps in understanding:
+---
 
-- Containerization using Docker
-- Multi-container orchestration using Docker Compose
-- Load balancing with Nginx
-- Service discovery using Docker internal networking
-- Environment variable based configuration
-- Persistent storage using Docker volumes
-- Basic production-style deployment architecture
+## Folder Structure
 
-To start the application:
+```
+.
+├── Dockerfile
+├── docker-compose.yml
+├── app.py
+├── requirements.txt
+├── nginx/
+│   └── nginx.conf
+└── db-init/
+    └── init.sql
+```
+
+---
+
+## How it Works
+
+When the project is started, Docker Compose will:
+
+* Build the Flask application image
+* Start two Flask containers (app1 and app2)
+* Start MySQL and create the required database
+* Start Redis service
+* Start Nginx and expose it on port 8080
+
+All services communicate using the default Docker network.
+
+User requests first reach Nginx and then get forwarded to one of the Flask containers.
+
+---
+
+## Running the Project
+
+Make sure Docker and Docker Compose are installed.
+
+Start the application using:
+
+```
+docker compose up --build
+```
+
+After the containers are up, open the browser and access:
+
+```
+http://localhost:8080
+```
+
+---
+
+## Notes
+
+* MySQL data is stored in a Docker volume so it will not be lost when containers restart.
+* Database initialization scripts can be placed inside the `db-init` folder.
+* Nginx configuration is mounted using a bind volume so it can be edited without rebuilding the image.
+* This setup is mainly created for learning Docker networking, reverse proxy, and multi-container deployment.
+
+---
+
+## Learning Purpose
+
+This project was created to practice:
+
+* Docker image creation
+* Docker Compose multi-service setup
+* Basic load balancing using Nginx
+* Service-to-service communication
+* Environment variable configuration
+* Simple microservices style deployment
+
+---
